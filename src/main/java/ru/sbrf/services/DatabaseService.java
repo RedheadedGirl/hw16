@@ -1,7 +1,8 @@
 package ru.sbrf.services;
 
+import ru.sbrf.exceptions.DbException;
+
 import java.sql.*;
-import java.util.Properties;
 
 public class DatabaseService {
 
@@ -13,10 +14,8 @@ public class DatabaseService {
             Class.forName("org.postgresql.Driver");
             this.connection = DriverManager.getConnection(url);
             createTableIfNotExists();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DbException("Возникла ошибка при инициализации", e);
         }
     }
 
@@ -29,25 +28,33 @@ public class DatabaseService {
         statement.executeUpdate();
     }
 
-    public Integer[] selectWhereNumber(int number) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("select * from cache where number = ?");
-        statement.setInt(1, number);
-        ResultSet resultSet = statement.executeQuery();
-        while (resultSet.next()) {
-            Array result = resultSet.getArray("result");
-            return (Integer[]) result.getArray();
+    public Integer[] selectWhereNumber(int number) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("select * from cache where number = ?");
+            statement.setInt(1, number);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Array result = resultSet.getArray("result");
+                return (Integer[]) result.getArray();
+            }
+            return new Integer[]{};
+        } catch (Exception exception) {
+            throw new DbException("Не удалось выполнить селект", exception);
         }
-        return new Integer[]{};
     }
 
-    public void insert(int number, Integer[] result) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("insert into cache(number, result) " +
-                "VALUES (?, ?)");
+    public void insert(int number, Integer[] result) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("insert into cache(number, result) " +
+                    "VALUES (?, ?)");
 
-        Array array = connection.createArrayOf("INTEGER", result);
-        statement.setInt(1, number);
-        statement.setArray(2, array);
-        int inserted = statement.executeUpdate();
-        System.out.println("Rows inserted: " + inserted);
+            Array array = connection.createArrayOf("INTEGER", result);
+            statement.setInt(1, number);
+            statement.setArray(2, array);
+            int inserted = statement.executeUpdate();
+            System.out.println("Rows inserted: " + inserted);
+        } catch (Exception exception) {
+            throw new DbException("Не удалось вставить данные", exception);
+        }
     }
 }
