@@ -1,4 +1,4 @@
-package ru.sbrf;
+package ru.sbrf.interfaces;
 
 import java.lang.annotation.*;
 
@@ -6,5 +6,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @interface Cachable {
-//    Class<? extends Source> value() ;
+
 }

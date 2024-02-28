@@ -1,4 +1,4 @@
-package ru.sbrf;
+package ru.sbrf.interfaces;
 
 import java.util.List;
 

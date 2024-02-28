@@ -1,9 +1,11 @@
-package ru.sbrf;
+package ru.sbrf.implementations;
+
+import ru.sbrf.interfaces.Calculator;
 
 import java.util.Arrays;
 import java.util.List;
 
-class CalculatorImpl implements Calculator {
+public class CalculatorImpl implements Calculator {
 
     @Override
     public List<Integer> fibonachi(int number) {

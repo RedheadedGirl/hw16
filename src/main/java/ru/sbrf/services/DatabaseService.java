@@ -1,4 +1,4 @@
-package ru.sbrf;
+package ru.sbrf.services;
 
 import java.sql.*;
 import java.util.Properties;

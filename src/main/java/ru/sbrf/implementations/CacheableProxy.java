@@ -1,4 +1,6 @@
-package ru.sbrf;
+package ru.sbrf.implementations;
+
+import ru.sbrf.services.DatabaseService;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
